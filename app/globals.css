@@ -8,12 +8,27 @@
   --navy: #102f40;
   --deep: #082532;
   --teal: #159d9a;
-  --teal-dark: #087b7a;
+  --teal-dark: #06706f;
+  --teal-bright: #64e6d2;
   --mint: #e2f5f3;
   --paper: #f4f7f8;
   --line: #d8e3e7;
-  --muted: #69808d;
+  --muted: #566b76;
   --white: #fff;
+}
+
+/* 深色底上的次要文字需要更亮的同色系取值，就地覆盖 token：
+   同一个 --muted 无法既在浅底够深（≥4.5:1）又在深底够亮 */
+.how,
+.vision,
+footer {
+  --muted: #9db8c2;
+}
+
+/* 深色 section 里的小标签改用亮青：--teal-dark 在 --deep 上只有 3.12:1 */
+.how .kicker,
+.vision .kicker {
+  color: var(--teal-bright);
 }
 
 /* ==========================================
@@ -49,6 +64,13 @@ a {
 
 p {
   margin: 0;
+}
+
+/* 标题用均衡换行，避免中文标题在字中间断开产生孤字（如「一目了 / 然。」） */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }
 
 img {
@@ -118,7 +140,7 @@ button {
 }
 
 .brand small {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
 }
 
@@ -391,7 +413,7 @@ h1 em,
   gap: 25px;
   margin-top: 34px;
   font-size: 12px;
-  color: #617985;
+  color: var(--muted);
   flex-wrap: wrap;
 }
 
@@ -465,8 +487,8 @@ h1 em,
 
 .window-bar b {
   margin-left: 8px;
-  font-size: 8px;
-  color: #78909b;
+  font-size: 11px;
+  color: var(--muted);
   letter-spacing: 0.12em;
 }
 
@@ -504,7 +526,7 @@ h1 em,
 
 .status-card small {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .pulse {
@@ -572,8 +594,8 @@ h1 em,
   display: flex;
   gap: 12px;
   align-items: center;
-  color: #76909a;
-  font-size: 9px;
+  color: var(--muted);
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   opacity: 0.7;
@@ -656,7 +678,7 @@ h1 em,
 
 .outcome > span {
   font-size: 11px;
-  color: var(--teal);
+  color: var(--teal-dark);
   letter-spacing: 0.16em;
   font-weight: 700;
 }
@@ -726,9 +748,9 @@ h1 em,
 .manifesto small {
   display: block;
   margin-top: 34px;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.22em;
-  color: #90a4ad;
+  color: var(--muted);
   text-transform: uppercase;
 }
 
@@ -780,7 +802,7 @@ h1 em,
 }
 
 .route-terminal small {
-  font-size: 10px;
+  font-size: 12px;
   color: #78959e;
 }
 
@@ -809,7 +831,7 @@ h1 em,
 }
 
 .route-core small {
-  font-size: 9px;
+  font-size: 11px;
   color: #75bcb8;
 }
 
@@ -907,7 +929,7 @@ h1 em,
 }
 
 .protocol-top span {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.15em;
   font-weight: 700;
 }
@@ -929,7 +951,7 @@ h1 em,
   align-items: center;
   gap: 7px;
   margin-top: 22px;
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.15em;
   color: #6fcfc8;
   text-transform: uppercase;
@@ -1017,7 +1039,7 @@ h1 em,
 
 .chapter-tag {
   margin-top: 27px;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.19em;
   color: var(--teal-dark);
   font-weight: 800;
@@ -1025,7 +1047,7 @@ h1 em,
 }
 
 .chapter-copy h3 {
-  font-size: clamp(28px, 3vw, 48px);
+  font-size: clamp(25px, 2.5vw, 38px);
   line-height: 1.2;
   letter-spacing: -0.04em;
   margin: 15px 0 22px;
@@ -1053,7 +1075,7 @@ h1 em,
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 8px 12px;
-  font-size: 10px;
+  font-size: 11px;
   color: #58717d;
   transition: all 0.2s ease;
 }
@@ -1110,8 +1132,8 @@ h1 em,
 
 .frame-top span {
   margin-left: 8px;
-  font-size: 8px;
-  color: #78909b;
+  font-size: 11px;
+  color: var(--muted);
   letter-spacing: 0.12em;
 }
 
@@ -1167,7 +1189,7 @@ h1 em,
 }
 
 .people-grid article > p {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.15em;
   color: var(--teal-dark);
   margin-top: 45px;
@@ -1304,13 +1326,13 @@ h1 em,
 }
 
 .mini-card small {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--muted);
 }
 
 .mini-card > span {
-  font-size: 9px;
-  color: #098a68;
+  font-size: 11px;
+  color: #0a7a5c;
   background: #ddf7ee;
   border-radius: 12px;
   padding: 5px 8px;
@@ -1371,8 +1393,8 @@ h1 em,
 }
 
 .future-grid span {
-  font-size: 9px;
-  color: #59ccc4;
+  font-size: 11px;
+  color: var(--teal-bright);
   letter-spacing: 0.16em;
   font-weight: 700;
   text-transform: uppercase;
@@ -1649,7 +1671,7 @@ h1 em,
 
 .download-item-title em {
   font-style: normal;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
   padding: 2px 8px;
@@ -1669,7 +1691,7 @@ h1 em,
   align-items: center;
   gap: 10px;
   font-size: 11px;
-  color: #7b929d;
+  color: var(--muted);
 }
 
 .download-item-file code {
@@ -1788,8 +1810,8 @@ footer > small {
   grid-column: 1 / -1;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 23px;
-  color: #58747f;
-  font-size: 9px;
+  color: var(--muted);
+  font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -2033,7 +2055,7 @@ footer > small {
   }
 
   .brand small {
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .hero {

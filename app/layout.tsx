@@ -1,16 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   title: 'IIEAO — 让每一份文件，都有一条回家的路',
@@ -19,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'IIEAO — 让每一份文件，都有一条回家的路',
     description: '你的内容，你的节点，你选择的路。',
-    images: ['/iieao-social-card.png'],
+    images: ['/iieao-social-card.jpg'],
     locale: 'zh_CN',
     type: 'website',
   },
@@ -27,7 +16,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'IIEAO — 让每一份文件，都有一条回家的路',
     description: '你的内容，你的节点，你选择的路。',
-    images: ['/iieao-social-card.png'],
+    images: ['/iieao-social-card.jpg'],
   },
 };
 
@@ -38,9 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         {children}
       </body>
     </html>
