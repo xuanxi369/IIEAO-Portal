@@ -1,8 +1,10 @@
 'use client';
 
 import Image from "next/image";
-import { ArrowDown, ArrowRight, Blocks, Check, ChevronRight, CircleCheck, Code2, Database, FileCheck2, Files, KeyRound, Menu, Network, Orbit, PackageCheck, Radio, RefreshCcw, Route, Send, ShieldCheck, Sparkles, UsersRound, Waypoints, Zap, X } from "lucide-react";
+import { ArrowDown, ArrowRight, Blocks, Check, ChevronRight, CircleCheck, Code2, Database, Download, FileCheck2, Files, KeyRound, Menu, Network, Orbit, PackageCheck, Radio, RefreshCcw, Route, Send, ShieldCheck, Sparkles, UsersRound, Waypoints, Zap, X } from "lucide-react";
 import { useState, useEffect } from "react";
+
+import { DownloadDialog } from "@/components/download-dialog";
 
 const outcomes = [
   { n: "01", title: "全程可追溯的传输路径", text: "每一次数据流转都拥有清晰的传输轨迹，从本地副本到节点状态，让内容流动透明可控。" },
@@ -27,6 +29,7 @@ const chapters = [
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [downloadOpen, setDownloadOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,7 +49,10 @@ export default function Home() {
       <header className={`site-header ${headerScrolled ? 'scrolled' : ''}`}>
         <a className="brand" href="#top" aria-label="IIEAO 首页"><Image src="/iieao-icon.png" width={38} height={38} alt="IIEAO" priority /><span><strong>IIEAO</strong><small>去中心化内容节点</small></span></a>
         <nav aria-label="主导航"><a href="#why">核心理念</a><a href="#how">技术架构</a><a href="#abilities">产品能力</a><a href="#vision">发展路线</a></nav>
-        <a className="header-cta" href="#abilities">探索产品 <ArrowRight size={16} /></a>
+        <div className="header-actions">
+          <button className="header-download" type="button" onClick={() => setDownloadOpen(true)}><Download size={15} /> 下载</button>
+          <a className="header-cta" href="#abilities">探索产品 <ArrowRight size={16} /></a>
+        </div>
         <button 
           className="menu" 
           aria-label={mobileMenuOpen ? "关闭导航菜单" : "打开导航菜单"}
@@ -62,6 +68,9 @@ export default function Home() {
           <a href="#how" onClick={closeMobileMenu}>技术架构</a>
           <a href="#abilities" onClick={closeMobileMenu}>产品能力</a>
           <a href="#vision" onClick={closeMobileMenu}>发展路线</a>
+          <button className="mobile-download" type="button" onClick={() => { closeMobileMenu(); setDownloadOpen(true); }}>
+            <Download size={18} /> 下载客户端
+          </button>
           <a href="https://github.com/xuanxi369/IPFS-Desktop-Rust" target="_blank" rel="noreferrer" onClick={closeMobileMenu} style={{background: 'var(--mint)', borderColor: 'var(--teal)', color: 'var(--teal-dark)'}}>
             <Code2 size={18} /> 开源代码库
           </a>
@@ -73,7 +82,7 @@ export default function Home() {
           <div className="eyebrow"><span /> LOCAL-FIRST · CONTENT NODE</div>
           <h1>构建个人数据<br /><em>主权基础设施。</em></h1>
           <p className="hero-lead">IIEAO 将分散的存储与传输协议整合为统一的本地内容节点，通过内容寻址、可验证传输与多协议路由，让用户真正拥有数据的控制权与可追溯性。</p>
-          <div className="hero-actions"><a className="primary" href="#how">查看技术架构 <ArrowRight size={18} /></a><a className="secondary" href="https://github.com/xuanxi369/IPFS-Desktop-Rust" target="_blank" rel="noreferrer"><Code2 size={18} /> 开源代码库</a></div>
+          <div className="hero-actions"><button className="primary" type="button" onClick={() => setDownloadOpen(true)}><Download size={18} /> 下载客户端</button><a className="secondary" href="#how">查看技术架构 <ArrowRight size={18} /></a><a className="secondary" href="https://github.com/xuanxi369/IPFS-Desktop-Rust" target="_blank" rel="noreferrer"><Code2 size={18} /> 开源代码库</a></div>
           <div className="hero-proof"><span><i /> 本地优先架构</span><span><i /> 可验证传输</span><span><i /> IPFS 生态兼容</span></div>
         </div>
         <div className="hero-visual" aria-label="IIEAO 产品界面">
@@ -129,9 +138,11 @@ export default function Home() {
         <div className="future-grid"><article><span>当前阶段</span><h3>统一的本地内容节点</h3><p>集成多协议传输、内容寻址存储、可验证恢复与副本治理于单一桌面应用。</p></article><article><span>下一里程碑</span><h3>跨设备的可信内容网络</h3><p>通过设备间的加密通道与信任机制，让内容在个人设备网络中无缝流动。</p></article><article><span>长期愿景</span><h3>用户主权的数据基础设施</h3><p>身份可迁移、内容可移植、历史可追溯——数据主权真正归属于创造它的人。</p></article></div>
       </section>
 
-      <section className="closing section"><div className="closing-node"><Image src="/iieao-icon.png" width={68} height={68} alt="IIEAO" /></div><p className="kicker">LOCAL-FIRST · VERIFIABLE · SOVEREIGN</p><h2>下一代互联网基础设施，<br /><em>从重构数据主权开始。</em></h2><p>从今天开始构建属于你的去中心化内容节点，让数据真正掌握在自己手中。</p><div className="hero-actions centered-actions"><a className="primary teal-button" href="https://github.com/xuanxi369/IPFS-Desktop-Rust" target="_blank" rel="noreferrer"><Code2 size={18} /> 探索 IIEAO</a><a className="secondary dark-secondary" href="#top">返回顶部 <ArrowRight size={18} /></a></div></section>
+      <section className="closing section"><div className="closing-node"><Image src="/iieao-icon.png" width={68} height={68} alt="IIEAO" /></div><p className="kicker">LOCAL-FIRST · VERIFIABLE · SOVEREIGN</p><h2>下一代互联网基础设施，<br /><em>从重构数据主权开始。</em></h2><p>从今天开始构建属于你的去中心化内容节点，让数据真正掌握在自己手中。</p><div className="hero-actions centered-actions"><button className="primary teal-button" type="button" onClick={() => setDownloadOpen(true)}><Download size={18} /> 下载客户端</button><a className="secondary dark-secondary" href="https://github.com/xuanxi369/IPFS-Desktop-Rust" target="_blank" rel="noreferrer"><Code2 size={18} /> 探索 IIEAO</a><a className="secondary dark-secondary" href="#top">返回顶部 <ArrowRight size={18} /></a></div></section>
 
       <footer><a className="brand footer-brand" href="#top"><Image src="/iieao-icon.png" width={34} height={34} alt="" /><span><strong>IIEAO</strong><small>去中心化内容节点</small></span></a><p>为数据所有权、内容可追溯性与长期可访问性而设计。</p><div><a href="#why">核心理念</a><a href="#how">技术架构</a><a href="#abilities">产品能力</a><a href="https://github.com/xuanxi369/IPFS-Desktop-Rust" target="_blank" rel="noreferrer">GitHub <ChevronRight size={13} /></a></div><small>© 2025 IIEAO. Infrastructure for Data Sovereignty.</small></footer>
+
+      <DownloadDialog open={downloadOpen} onOpenChange={setDownloadOpen} />
     </main>
   );
 }
