@@ -8,18 +8,63 @@ import { DownloadDialog } from "@/components/download-dialog";
 import { useI18n } from "@/components/i18n-provider";
 import { LanguageChips, LanguageSwitcher } from "@/components/language-switcher";
 import { REPOSITORY_URL } from "@/lib/downloads";
+import { PRODUCT_IMAGES, type ProductImage } from "@/lib/product-images";
 
 // 协议名与技术标识不随语言变化，位置与字典中 protocols 的顺序一一对应
 const PROTOCOL_NAMES = ["IROH", "SWARM", "AVRS", "IPFS / KUBO"];
 const PROTOCOL_ICONS = [Zap, UsersRound, FileCheck2, Network];
 
-// 章节配图与图标同样按语言无关的顺序排列
+// 章节配图与图标同样按语言无关的顺序排列（图片清单由 scripts/generate-image-variants.mjs 生成）
 const CHAPTER_VISUALS = [
-  { image: "/product/files.png", icon: Files },
-  { image: "/product/send-receive.png", icon: Send },
-  { image: "/product/swarm.png", icon: Route },
-  { image: "/product/storage-governance.png", icon: RefreshCcw },
+  { image: PRODUCT_IMAGES.files, icon: Files },
+  { image: PRODUCT_IMAGES['send-receive'], icon: Send },
+  { image: PRODUCT_IMAGES.swarm, icon: Route },
+  { image: PRODUCT_IMAGES['storage-governance'], icon: RefreshCcw },
 ];
+
+/**
+ * 截图的档位选择交给浏览器（srcSet + sizes）；这里声明的展示宽度与 globals.css 的
+ * 断点保持一致：≤1050px 单列铺满，桌面上约占半栏。
+ */
+const SECTION_SHOT_SIZES = '(max-width: 1050px) 92vw, 48vw';
+const HERO_SHOT_SIZES = '(max-width: 1050px) 92vw, 50vw';
+
+/**
+ * 产品截图：预生成的静态 WebP + 内联模糊占位（LQIP）。
+ *
+ * 这里刻意不用 next/image —— 生产环境没有绑定图像优化器，/_next/image 只会把原始
+ * PNG 原样回源（400KB 级），首访时就是“空白 → 突然出现”。静态 WebP 体积约为原
+ * PNG 的 15%~25%，且不依赖运行时的图像转换。
+ */
+function ProductShot({
+  image,
+  alt,
+  sizes,
+  priority = false,
+}: {
+  image: ProductImage;
+  alt: string;
+  sizes: string;
+  priority?: boolean;
+}) {
+  return (
+    // 已预生成多档静态 WebP 并内联 LQIP；改用 next/image 反而会回退到运行时原图直通
+    // oxlint-disable-next-line next/no-img-element
+    <img
+      className="product-shot"
+      src={image.src}
+      srcSet={image.srcSet}
+      sizes={sizes}
+      alt={alt}
+      width={image.width}
+      height={image.height}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : undefined}
+      decoding={priority ? 'sync' : 'async'}
+      style={{ backgroundImage: `url("${image.blurDataURL}")` }}
+    />
+  );
+}
 
 const PEOPLE_ICONS = [PackageCheck, Waypoints, KeyRound, Blocks];
 const PROOF_ICONS = [ShieldCheck, Radio, Database];
@@ -99,7 +144,7 @@ export default function Home() {
         </div>
         <div className="hero-visual" aria-label={t.a11y.heroVisual}>
           <div className="orbit-line orbit-one" /><div className="orbit-line orbit-two" /><div className="node node-a" /><div className="node node-b" /><div className="node node-c" />
-          <div className="window"><div className="window-bar"><span /><span /><span /><b>{t.hero.windowTitle}</b></div><Image src="/product/dashboard.png" alt={t.hero.dashboardAlt} width={1920} height={1080} priority /></div>
+          <div className="window"><div className="window-bar"><span /><span /><span /><b>{t.hero.windowTitle}</b></div><ProductShot image={PRODUCT_IMAGES.dashboard} alt={t.hero.dashboardAlt} sizes={HERO_SHOT_SIZES} priority /></div>
           <div className="status-card"><span className="pulse" /><div><b>{t.hero.statusTitle}</b><small>{t.hero.statusSub}</small></div></div>
         </div>
         <a className="scroll-hint" href="#why"><span>{t.hero.scroll}</span><ArrowDown size={15} /></a>
@@ -126,7 +171,7 @@ export default function Home() {
 
       <section className="abilities section" id="abilities">
         <div className="section-heading"><p className="kicker">{t.abilities.kicker}</p><h2>{t.abilities.titleLine1}<br />{t.abilities.titleLine2}</h2><p>{t.abilities.lead}</p></div>
-        <div className="chapter-list">{chapters.map(({ tag, title, text, image, alt, icon: Icon, notes }, index) => <article className={`chapter ${index % 2 ? "reverse" : ""}`} key={tag}><div className="chapter-copy"><span className="chapter-icon"><Icon /></span><p className="chapter-tag">{tag}</p><h3>{title}</h3><p>{text}</p><div className="note-row">{notes.map((note, noteIndex) => <span key={`${noteIndex}-${note}`}><Check size={13} />{note}</span>)}</div></div><div className="product-frame"><div className="frame-top"><i /><i /><i /><span>IIEAO DESKTOP</span></div><Image src={image} alt={alt} width={1920} height={1080} /><div className="frame-glow" /></div></article>)}</div>
+        <div className="chapter-list">{chapters.map(({ tag, title, text, image, alt, icon: Icon, notes }, index) => <article className={`chapter ${index % 2 ? "reverse" : ""}`} key={tag}><div className="chapter-copy"><span className="chapter-icon"><Icon /></span><p className="chapter-tag">{tag}</p><h3>{title}</h3><p>{text}</p><div className="note-row">{notes.map((note, noteIndex) => <span key={`${noteIndex}-${note}`}><Check size={13} />{note}</span>)}</div></div><div className="product-frame"><div className="frame-top"><i /><i /><i /><span>IIEAO DESKTOP</span></div><ProductShot image={image} alt={alt} sizes={SECTION_SHOT_SIZES} /><div className="frame-glow" /></div></article>)}</div>
       </section>
 
       <section className="people section">
@@ -141,7 +186,7 @@ export default function Home() {
 
       <section className="proof section">
         <div className="proof-copy"><p className="kicker">{t.proof.kicker}</p><h2>{t.proof.titleLine1}<br />{t.proof.titleLine2}</h2><p>{t.proof.lead}</p><div className="proof-points">{t.proof.points.map((point, index) => { const Icon = PROOF_ICONS[index]; return <span key={point}><Icon /> {point}</span>; })}</div></div>
-        <div className="proof-stack"><div className="stack-card back-two" /><div className="stack-card back-one" /><div className="stack-card main-card"><Image src="/product/local-transfer.png" alt={t.proof.imageAlt} width={1920} height={1080} /></div><div className="mini-card"><Orbit /><div><b>{t.proof.miniCard.title}</b><small>{t.proof.miniCard.sub}</small></div><span>{t.proof.miniCard.status}</span></div></div>
+        <div className="proof-stack"><div className="stack-card back-two" /><div className="stack-card back-one" /><div className="stack-card main-card"><ProductShot image={PRODUCT_IMAGES['local-transfer']} alt={t.proof.imageAlt} sizes={SECTION_SHOT_SIZES} /></div><div className="mini-card"><Orbit /><div><b>{t.proof.miniCard.title}</b><small>{t.proof.miniCard.sub}</small></div><span>{t.proof.miniCard.status}</span></div></div>
       </section>
 
       <section className="vision section" id="vision">

@@ -642,6 +642,13 @@ h1 em,
   letter-spacing: 0.12em;
 }
 
+.product-shot {
+  /* 图片到达前显示内联的模糊占位（LQIP），两者构图一致，替换时过渡自然 */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .window img {
   display: block;
   width: 100%;
