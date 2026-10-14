@@ -299,6 +299,156 @@ button {
 }
 
 /* ==========================================
+   Language Switcher
+   ========================================== */
+.lang-switch {
+  position: relative;
+}
+
+.lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #b8cbd2;
+  border-radius: 9px;
+  background: white;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #33525f;
+  transition: all 0.2s ease;
+}
+
+.lang-trigger:hover,
+.lang-trigger[aria-expanded='true'] {
+  background: var(--mint);
+  border-color: var(--teal);
+  color: var(--teal-dark);
+}
+
+.lang-trigger svg[data-chevron] {
+  transition: transform 0.2s ease;
+}
+
+.lang-trigger[aria-expanded='true'] svg[data-chevron] {
+  transform: rotate(180deg);
+}
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 120;
+  display: grid;
+  gap: 2px;
+  min-width: 196px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(11, 44, 61, 0.16);
+  animation: langMenuIn 0.16s ease;
+}
+
+@keyframes langMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 9px 11px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+  transition: background 0.18s ease;
+}
+
+.lang-option:hover {
+  background: var(--mint);
+}
+
+.lang-option[aria-pressed='true'] {
+  background: var(--mint);
+  color: var(--teal-dark);
+}
+
+.lang-option small {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.lang-option[aria-pressed='true'] small {
+  color: var(--teal-dark);
+}
+
+/* 移动端导航里的语言胶囊按钮组 */
+.mobile-langs {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.mobile-langs > span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lang-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lang-chip {
+  padding: 9px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+
+.lang-chip:hover {
+  border-color: var(--teal);
+  color: var(--teal-dark);
+}
+
+.lang-chip[aria-pressed='true'] {
+  background: var(--mint);
+  border-color: var(--teal);
+  color: var(--teal-dark);
+}
+
+/* ==========================================
    Hero Section
    ========================================== */
 .hero {
@@ -2045,6 +2195,11 @@ footer > small {
     gap: 20px;
   }
 
+  /* 窄屏头部放不下语言按钮，改用移动菜单里的语言胶囊 */
+  .lang-switch {
+    display: none;
+  }
+
   .brand img {
     width: 32px;
     height: 32px;
@@ -2217,7 +2372,9 @@ footer > small {
 
   .primary,
   .secondary,
-  .header-cta {
+  .header-cta,
+  .lang-trigger,
+  .lang-chip {
     border-width: 2px;
   }
 }

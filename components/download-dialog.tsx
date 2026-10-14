@@ -3,6 +3,7 @@
 import { Dialog } from '@base-ui/react/dialog';
 import { Download, ExternalLink, Laptop, Monitor, ShieldCheck, X } from 'lucide-react';
 
+import { useI18n } from '@/components/i18n-provider';
 import {
   DOWNLOAD_GROUPS,
   DOWNLOAD_VERSION,
@@ -23,6 +24,8 @@ interface DownloadDialogProps {
 
 /** 全局下载面板：列出 R2 上最新的 IIEAO 桌面客户端安装包 */
 export function DownloadDialog({ open, onOpenChange }: DownloadDialogProps) {
+  const { t } = useI18n();
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -33,12 +36,12 @@ export function DownloadDialog({ open, onOpenChange }: DownloadDialogProps) {
               <Download size={17} />
             </span>
             <div className="download-head-copy">
-              <Dialog.Title className="download-title">下载 IIEAO 桌面客户端</Dialog.Title>
+              <Dialog.Title className="download-title">{t.downloads.title}</Dialog.Title>
               <Dialog.Description className="download-desc">
-                选择你的系统，获取最新版本 v{DOWNLOAD_VERSION}。安装包由 Cloudflare R2 直链分发。
+                {t.downloads.desc(DOWNLOAD_VERSION)}
               </Dialog.Description>
             </div>
-            <Dialog.Close className="download-close" aria-label="关闭下载面板">
+            <Dialog.Close className="download-close" aria-label={t.downloads.close}>
               <X size={18} />
             </Dialog.Close>
           </header>
@@ -51,27 +54,30 @@ export function DownloadDialog({ open, onOpenChange }: DownloadDialogProps) {
                   <div className="download-group-head">
                     <PlatformIcon size={15} />
                     <b>{group.platform}</b>
-                    <span>{group.targets.length} 个安装包</span>
+                    <span>{t.downloads.groupCount(group.targets.length)}</span>
                   </div>
                   <div className="download-list">
-                    {group.targets.map((target) => (
-                      <article className="download-item" key={target.file}>
-                        <div className="download-item-copy">
-                          <p className="download-item-title">
-                            {target.title}
-                            {target.recommended ? <em>推荐</em> : null}
-                          </p>
-                          <p className="download-item-note">{target.note}</p>
-                          <p className="download-item-file">
-                            <code>{target.file}</code>
-                            <span>{target.size}</span>
-                          </p>
-                        </div>
-                        <a className="download-cta" href={downloadUrl(target.file)} rel="noreferrer">
-                          <Download size={15} /> 下载
-                        </a>
-                      </article>
-                    ))}
+                    {group.targets.map((target) => {
+                      const copy = t.downloads.targets[target.id];
+                      return (
+                        <article className="download-item" key={target.file}>
+                          <div className="download-item-copy">
+                            <p className="download-item-title">
+                              {copy.title}
+                              {target.recommended ? <em>{t.downloads.recommended}</em> : null}
+                            </p>
+                            <p className="download-item-note">{copy.note}</p>
+                            <p className="download-item-file">
+                              <code>{target.file}</code>
+                              <span>{target.size}</span>
+                            </p>
+                          </div>
+                          <a className="download-cta" href={downloadUrl(target.file)} rel="noreferrer">
+                            <Download size={15} /> {t.downloads.action}
+                          </a>
+                        </article>
+                      );
+                    })}
                   </div>
                 </section>
               );
@@ -80,10 +86,10 @@ export function DownloadDialog({ open, onOpenChange }: DownloadDialogProps) {
 
           <div className="download-foot">
             <span>
-              <ShieldCheck size={14} /> 直链下载不经过第三方中转
+              <ShieldCheck size={14} /> {t.downloads.footNote}
             </span>
             <a href={REPOSITORY_URL} target="_blank" rel="noreferrer">
-              查看开源代码 <ExternalLink size={13} />
+              {t.downloads.repoLink} <ExternalLink size={13} />
             </a>
           </div>
         </Dialog.Popup>
